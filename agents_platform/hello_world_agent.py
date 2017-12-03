@@ -12,8 +12,8 @@ from own_adapter.board import Board
 from own_adapter.element import Element
 from own_adapter.platform_access import PlatformAccess
 
-AGENT_LOGIN = ''
-AGENT_PASSWORD = ''
+AGENT_LOGIN = 'bisensualagent@gmail.com'
+AGENT_PASSWORD = 'bisensualagent1'
 
 
 def __do_something(element):
@@ -21,7 +21,8 @@ def __do_something(element):
 
     # examples:
     # put a message to a board
-    message = 'Hello world!'
+    message = 'I am the best bot EVER!!!!'
+    #print('fwe'+element.get_name())
     element.get_board().put_message(message)
 
     # put a URL to an element
@@ -49,14 +50,91 @@ def periodical_update():
     """Does periodical work with a predefined time interval"""
     time_interval = 86400
 
-    while True:
-        time.sleep(time_interval)
+    while (True):
 
         agent = get_agent()
         boards = agent.get_boards()
+
         for board in boards:
-            __run_on_board(board)
-        logger.info('helloworld', 'Daily news update is done.')
+            if board.get_id() == '101':
+                board.add_element(3, 3, 3, 5, 'First report')
+                board.add_element(1, 4, 2, 3, 'Second report')
+                board.add_element(6, 4, 2, 3, 'Third report')
+                board.add_element(4, 1, 1, 2, 'Fourth report')
+                board.add_element(4, 8, 1, 2, 'Fifth report')
+                board.add_element(2, 2, 1, 1, 'Sixth report')
+                board.add_element(6, 2, 1, 1, 'Seventh report')
+                board.add_element(2, 8, 1, 1, 'Eighth report')
+                board.add_element(6, 8, 1, 1, 'Ninth report')
+
+                for element in board.get_elements():
+                    time.sleep(10)
+                    # print(element.get_url())
+                    if element.get_name() == 'First report':
+                        with open('1.pdf', 'rb') as f1:
+                            file_bytes = bytearray(f1.read())
+                            element.put_file('1.pdf', file_bytes)
+
+                    if element.get_name == 'Second report':
+                        with open('2.pdf', 'rb') as f2:
+                            file_bytes = bytearray(f2.read())
+                            element.put_file('2.pdf', file_bytes)
+
+                    if element.get_name == 'Third report':
+                        with open('3.pdf', 'rb') as f3:
+                            file_bytes = bytearray(f3.read())
+                            element.put_file('3.pdf', file_bytes)
+
+                    if element.get_name == 'Fourth report':
+                        with open('4.pdf', 'rb') as f4:
+                            file_bytes = bytearray(f4.read())
+                            element.put_file('4.pdf', file_bytes)
+
+                    if element.get_name == 'Fifth report':
+                        with open('5.pdf', 'rb') as f5:
+                            file_bytes = bytearray(f5.read())
+                            element.put_file('5.pdf', file_bytes)
+
+                    if element.get_name == 'Sixth report':
+                        with open('6.pdf', 'rb') as f6:
+                            file_bytes = bytearray(f6.read())
+                            element.put_file('6.pdf', file_bytes)
+
+                    if element.get_name == 'Seventh report':
+                        with open('7.pdf', 'rb') as f7:
+                            file_bytes = bytearray(f7.read())
+                            element.put_file('7.pdf', file_bytes)
+
+                    if element.get_name == 'Eighth report':
+                        with open('8.pdf', 'rb') as f8:
+                            file_bytes = bytearray(f8.read())
+                            element.put_file('8.pdf', file_bytes)
+
+                    if element.get_name == 'Ninth report':
+                        with open('9.pdf', 'rb') as f9:
+                            file_bytes = bytearray(f9.read())
+                            element.put_file('9.pdf', file_bytes)
+
+                message = 'Following scientific research papers have been selected for you'
+                board.put_message(message)
+
+
+
+
+                # put a URL to an element
+                # url = 'https://www.own.space/'
+                # element.put_link(url)
+
+
+
+
+
+
+
+                # def add_element(self, pos_x, pos_y, size_x=1, size_y=1, caption=''):
+
+    time.sleep(time_interval)
+
 
 
 def get_agent():
@@ -77,6 +155,13 @@ def on_websocket_message(ws, message):
     message_type = content_type.replace('application/vnd.uberblik.', '')
 
     logger.debug('helloworld', message)
+    # if message_type == 'liveUpdateActivityUpdated+json':
+    if message_type == 'liveUpdateActivitiesUpdated+json':
+        print('I heard live activity {0}'.format(message_dict))
+        if message_dict['type'] == 'PostedToBoard':
+            print('message detected')
+            message_info = message_dict['displayText']
+            print(message_info)
 
     if message_type == 'liveUpdateElementCaptionEdited+json':
         element_caption = message_dict['newCaption']
